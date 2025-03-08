@@ -14,32 +14,17 @@ import roomescape.member.MemberDao;
 @Controller
 public class AuthController {
 
-    private final MemberDao memberDao;
+    private final AuthService authService;
 
-    public AuthController(MemberDao memberDao) {
-        this.memberDao = memberDao;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
-        String email = loginRequest.email();
-        String password = loginRequest.password();
-        Member findMember = memberDao.findByEmailAndPassword(email, password);
-        if (findMember == null) {
-            throw new RuntimeException("로그인 실패입니다.");
-        }
+        String accessToken = authService.generateAccessToken(loginRequest);
 
-        String secretKey = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
-        String accessToken = Jwts.builder()
-                .setSubject(findMember.getId().toString())
-                .claim("name", findMember.getName())
-                .claim("role", findMember.getRole())
-                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
-                .compact();
-        Cookie cookie = new Cookie("token", accessToken);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        response.addCookie(cookie);
+        setTokenToCookie(response, accessToken);
         return ResponseEntity.ok().build();
     }
 
@@ -53,4 +38,10 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
+    private static void setTokenToCookie(HttpServletResponse response, String accessToken) {
+        Cookie cookie = new Cookie("token", accessToken);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+    }
 }
