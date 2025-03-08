@@ -9,6 +9,8 @@ import roomescape.member.MemberDao;
 @Service
 public class AuthService {
 
+    private static final String SECRET_KEY = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
+
     private final MemberDao memberDao;
 
     public AuthService(final MemberDao memberDao) {
@@ -24,12 +26,26 @@ public class AuthService {
             throw new RuntimeException("로그인 실패입니다.");
         }
 
-        String secretKey = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
         return Jwts.builder()
                 .setSubject(findMember.getId().toString())
                 .claim("name", findMember.getName())
                 .claim("role", findMember.getRole())
-                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+                .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
                 .compact();
+    }
+
+    public LoginCheckResponse checkAccessToken(String accessToken) {
+        String name = Jwts.parserBuilder()
+                .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody()
+                .get("name", String.class);
+
+        if (memberDao.findByName(name) == null) {
+            throw new RuntimeException("can not find member");
+        }
+
+        return new LoginCheckResponse(name);
     }
 }
