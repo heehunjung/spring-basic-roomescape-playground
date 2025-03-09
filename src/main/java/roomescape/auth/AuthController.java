@@ -3,6 +3,7 @@ package roomescape.auth;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
         String accessToken = authService.generateAccessToken(loginRequest);
 
         Cookie cookie = new Cookie("token", accessToken);

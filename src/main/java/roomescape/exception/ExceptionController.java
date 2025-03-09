@@ -1,6 +1,10 @@
 package roomescape.exception;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -19,5 +23,16 @@ public class ExceptionController {
 
         return ResponseEntity.status(exception.getStatus())
                 .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<List<String>> handleInvalidFormatException(MethodArgumentNotValidException exception) {
+        List<String> errors = new ArrayList<>();
+        exception.getBindingResult().getFieldErrors().forEach(fieldError -> {
+            errors.add("[" + fieldError.getField() + "] " + fieldError.getDefaultMessage());
+        });
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(errors);
     }
 }
