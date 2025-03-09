@@ -54,7 +54,7 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
-    private static String getToken(Cookie[] cookies) {
+    private String getToken(Cookie[] cookies) {
         String accessToken = null;
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("token")) {
