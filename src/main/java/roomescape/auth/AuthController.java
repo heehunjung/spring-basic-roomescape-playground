@@ -1,17 +1,16 @@
 package roomescape.auth;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import roomescape.member.Member;
-import roomescape.member.MemberDao;
+import roomescape.exception.RoomescapeUnauthorizedException;
+
 
 @Controller
 public class AuthController {
@@ -34,23 +33,16 @@ public class AuthController {
     }
 
     @GetMapping("/login/check")
-    public ResponseEntity loginCheck(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity loginCheck(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        String accessToken = null;
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("token")) {
-                accessToken = cookie.getValue();
-            }
-        }
-
+        String accessToken = getToken(cookies);
         if (accessToken == null) {
-            throw new RuntimeException("Invalid accessToken");
+            throw new RoomescapeUnauthorizedException("Invalid accessToken");
         }
 
         LoginCheckResponse result = authService.checkAccessToken(accessToken);
         return ResponseEntity.ok().body(result);
     }
-
 
     @PostMapping("/logout")
     public ResponseEntity logout(HttpServletResponse response) {
@@ -62,4 +54,13 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
+    private static String getToken(Cookie[] cookies) {
+        String accessToken = null;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("token")) {
+                accessToken = cookie.getValue();
+            }
+        }
+        return accessToken;
+    }
 }

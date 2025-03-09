@@ -3,6 +3,7 @@ package roomescape.auth;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
+import roomescape.exception.RoomescapeUnauthorizedException;
 import roomescape.member.Member;
 import roomescape.member.MemberDao;
 
@@ -23,7 +24,7 @@ public class AuthService {
         Member findMember = memberDao.findByEmailAndPassword(email, password);
 
         if (findMember == null) {
-            throw new RuntimeException("로그인 실패입니다.");
+            throw new RoomescapeUnauthorizedException("회원 정보를 찾을 수 없습니다.");
         }
 
         return Jwts.builder()
@@ -43,7 +44,7 @@ public class AuthService {
                 .get("name", String.class);
 
         if (memberDao.findByName(name) == null) {
-            throw new RuntimeException("can not find member");
+            throw new RoomescapeUnauthorizedException("can not find member");
         }
 
         return new LoginCheckResponse(name);
