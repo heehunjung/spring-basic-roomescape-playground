@@ -2,15 +2,17 @@ package roomescape.auth;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
-import roomescape.exception.RoomescapeUnauthorizedException;
+import roomescape.global.exception.RoomescapeUnauthorizedException;
 import roomescape.member.Member;
 import roomescape.member.MemberDao;
 
 @Service
 public class AuthService {
 
-    private static final String SECRET_KEY = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
+    public static final String SECRET_KEY = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
 
     private final MemberDao memberDao;
 
@@ -43,10 +45,11 @@ public class AuthService {
                 .getBody()
                 .get("name", String.class);
 
-        if (memberDao.findByName(name) == null) {
-            throw new RoomescapeUnauthorizedException("can not find member");
+        try {
+            memberDao.findByName(name);
+            return new LoginCheckResponse(name);
+        } catch (IncorrectResultSizeDataAccessException exception) {
+            throw new RoomescapeUnauthorizedException("회원 정보를 찾을 수 없습니다.");
         }
-
-        return new LoginCheckResponse(name);
     }
 }

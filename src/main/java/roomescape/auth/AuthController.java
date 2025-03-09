@@ -4,13 +4,12 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import roomescape.exception.RoomescapeUnauthorizedException;
+import roomescape.global.exception.RoomescapeUnauthorizedException;
 
 
 @Controller
@@ -38,7 +37,7 @@ public class AuthController {
         Cookie[] cookies = request.getCookies();
         String accessToken = getToken(cookies);
         if (accessToken == null) {
-            throw new RoomescapeUnauthorizedException("Invalid accessToken");
+            throw new RoomescapeUnauthorizedException("로그인 되어있지 않습니다.");
         }
 
         LoginCheckResponse result = authService.checkAccessToken(accessToken);
