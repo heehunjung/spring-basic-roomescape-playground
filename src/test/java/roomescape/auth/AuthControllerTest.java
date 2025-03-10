@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @WebMvcTest(AuthController.class)
-class LoginRequestTest {
+class AuthControllerTest {
 
     @MockBean
     private AuthService authService;
