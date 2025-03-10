@@ -22,7 +22,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<Void> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
         String accessToken = authService.generateAccessToken(loginRequest);
 
         Cookie cookie = new Cookie("token", accessToken);
@@ -33,7 +33,7 @@ public class AuthController {
     }
 
     @GetMapping("/login/check")
-    public ResponseEntity loginCheck(HttpServletRequest request) {
+    public ResponseEntity<LoginCheckResponse> loginCheck(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         String accessToken = getToken(cookies);
         if (accessToken == null) {
@@ -45,7 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity logout(HttpServletResponse response) {
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
         Cookie cookie = new Cookie("token", "");
         cookie.setHttpOnly(true);
         cookie.setPath("/");
