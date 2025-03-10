@@ -27,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<Void> login(@RequestBody @Valid LoginRequest loginRequest) {
         String accessToken = authService.generateAccessToken(loginRequest);
         ResponseCookie responseCookie = ResponseCookie.from(TOKEN, accessToken)
                 .path("/")
@@ -50,7 +50,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpServletResponse response) {
+    public ResponseEntity<Void> logout() {
         ResponseCookie responseCookie = ResponseCookie.from(TOKEN, "")
                 .path("/")
                 .httpOnly(true)

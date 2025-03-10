@@ -16,7 +16,7 @@ public class AuthService {
 
     private final MemberDao memberDao;
 
-    public AuthService(final MemberDao memberDao) {
+    public AuthService(MemberDao memberDao) {
         this.memberDao = memberDao;
     }
 
