@@ -41,7 +41,7 @@ class LoginRequestTest {
         List<String> list = getExceptionMessages(exception);
         assertThat(list).containsExactlyInAnyOrder(
                 "[email] 이메일 양식에 맞지 않습니다.",
-                "[password] 이메일 양식에 맞지 않습니다.");
+                "[password] 비밀번호는 20자 이하여야 합니다.");
     }
 
     private List<String> getExceptionMessages(MethodArgumentNotValidException exception) {

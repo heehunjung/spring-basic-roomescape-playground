@@ -28,7 +28,7 @@ public class MissionStepTest {
                 .body(params)
                 .when().post("/login")
                 .then().log().all()
-                .statusCode(200)
+                .statusCode(204)
                 .extract();
 
         String token = response.headers().get("Set-Cookie").getValue().split(";")[0].split("=")[1];
