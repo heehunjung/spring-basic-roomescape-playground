@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,7 +32,7 @@ public class AuthController {
                 .httpOnly(true)
                 .build();
 
-        return ResponseEntity.ok()
+        return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
                 .build();
     }
@@ -45,7 +46,8 @@ public class AuthController {
         }
 
         LoginCheckResponse result = authService.checkAccessToken(accessToken);
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.ok()
+                .body(result);
     }
 
     @PostMapping("/logout")
@@ -56,7 +58,7 @@ public class AuthController {
                 .maxAge(0)
                 .build();
 
-        return ResponseEntity.ok()
+        return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
                 .build();
     }
