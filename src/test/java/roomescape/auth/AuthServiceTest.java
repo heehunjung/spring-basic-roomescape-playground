@@ -25,7 +25,8 @@ class AuthServiceTest {
     @BeforeEach
     void setUp() {
         memberDao = new MemberDao(jdbcTemplate);
-        authService = new AuthService(memberDao);
+        authService = new AuthService(memberDao, null);
+        // todo: 다른 방법 찾기
     }
 
     @Test

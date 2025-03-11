@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import roomescape.auth.session.CookieProvider;
 import roomescape.global.exception.RoomescapeUnauthorizedException;
 
 
@@ -21,18 +22,18 @@ public class AuthController {
     public static final String TOKEN = "token";
 
     private final AuthService authService;
+    private final CookieProvider cookieProvider;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, final CookieProvider cookieProvider) {
         this.authService = authService;
+        this.cookieProvider = cookieProvider;
     }
 
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody @Valid LoginRequest loginRequest) {
         String accessToken = authService.generateAccessToken(loginRequest);
-        ResponseCookie responseCookie = ResponseCookie.from(TOKEN, accessToken)
-                .path("/")
-                .httpOnly(true)
-                .build();
+        // fixme: 결국 service 에서 jwtProvider 호출만 하는거면 controller 로
+        ResponseCookie responseCookie = cookieProvider.generateCookie(TOKEN, accessToken);
 
         return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
