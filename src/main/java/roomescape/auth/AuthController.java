@@ -4,6 +4,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import java.time.Duration;
 import java.util.Arrays;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import roomescape.auth.session.CookieProvider;
+import roomescape.auth.session.JwtProvider;
 import roomescape.global.exception.RoomescapeUnauthorizedException;
 
 
@@ -20,11 +22,12 @@ import roomescape.global.exception.RoomescapeUnauthorizedException;
 public class AuthController {
 
     public static final String TOKEN = "token";
+    public static final String EXPIRED_TOKEN = "";
 
     private final AuthService authService;
     private final CookieProvider cookieProvider;
 
-    public AuthController(AuthService authService, final CookieProvider cookieProvider) {
+    public AuthController(AuthService authService, CookieProvider cookieProvider) {
         this.authService = authService;
         this.cookieProvider = cookieProvider;
     }
@@ -32,8 +35,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody @Valid LoginRequest loginRequest) {
         String accessToken = authService.generateAccessToken(loginRequest);
-        // fixme: 결국 service 에서 jwtProvider 호출만 하는거면 controller 로
-        ResponseCookie responseCookie = cookieProvider.generateCookie(TOKEN, accessToken);
+        ResponseCookie responseCookie = cookieProvider.generateCookie(TOKEN, accessToken, Duration.ofMinutes(60));
 
         return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
@@ -52,11 +54,7 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout() {
-        ResponseCookie responseCookie = ResponseCookie.from(TOKEN, "")
-                .path("/")
-                .httpOnly(true)
-                .maxAge(0)
-                .build();
+        ResponseCookie responseCookie = cookieProvider.generateCookie(TOKEN, EXPIRED_TOKEN, Duration.ZERO);
 
         return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, responseCookie.toString())

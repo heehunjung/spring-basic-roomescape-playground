@@ -12,11 +12,11 @@ public class JwtProvider {
     public static final String NAME = "name";
     public static final String ROLE = "role";
 
-    public String generateToken(Member member) {
+    public String generateToken(Long id, String name, String role) {
         return Jwts.builder()
-                .setSubject(member.getId().toString())
-                .claim(NAME, member.getName())
-                .claim(ROLE, member.getRole())
+                .setSubject(id.toString())
+                .claim(NAME, name)
+                .claim(ROLE, role)
                 .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
                 .compact();
     }
