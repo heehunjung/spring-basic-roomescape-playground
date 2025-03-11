@@ -28,11 +28,20 @@ public class MissionStepTest {
                 .body(params)
                 .when().post("/login")
                 .then().log().all()
-                .statusCode(200)
+                .statusCode(204)
                 .extract();
 
         String token = response.headers().get("Set-Cookie").getValue().split(";")[0].split("=")[1];
-
         assertThat(token).isNotBlank();
+
+        ExtractableResponse<Response> checkResponse = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .cookie("token", token)
+                .when().get("/login/check")
+                .then().log().all()
+                .statusCode(200)
+                .extract();
+
+        assertThat(checkResponse.body().jsonPath().getString("name")).isEqualTo("어드민");
     }
 }
