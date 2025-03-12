@@ -1,7 +1,7 @@
 CREATE TABLE time
 (
     id         BIGINT      NOT NULL AUTO_INCREMENT,
-    time_value VARCHAR(20) NOT NULL,
+    time_value TIME NOT NULL,
     deleted    BOOLEAN     NOT NULL DEFAULT FALSE,
     PRIMARY KEY (id)
 );
@@ -28,7 +28,7 @@ CREATE TABLE member
 CREATE TABLE reservation
 (
     id       BIGINT       NOT NULL AUTO_INCREMENT,
-    date     VARCHAR(255) NOT NULL,
+    date     DATE NOT NULL,
     name     VARCHAR(255) NOT NULL,
     time_id  BIGINT,
     theme_id BIGINT,
