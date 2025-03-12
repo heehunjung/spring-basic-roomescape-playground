@@ -35,4 +35,3 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
         return null;
     }
 }
-}
