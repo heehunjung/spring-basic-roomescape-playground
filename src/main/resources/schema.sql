@@ -1,8 +1,8 @@
-CREATE TABLE time
+CREATE TABLE reservationTime
 (
-    id         BIGINT      NOT NULL AUTO_INCREMENT,
-    time_value TIME NOT NULL,
-    deleted    BOOLEAN     NOT NULL DEFAULT FALSE,
+    id         BIGINT  NOT NULL AUTO_INCREMENT,
+    time_value TIME    NOT NULL,
+    deleted    BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (id)
 );
 
@@ -28,12 +28,12 @@ CREATE TABLE member
 CREATE TABLE reservation
 (
     id       BIGINT       NOT NULL AUTO_INCREMENT,
-    date     DATE NOT NULL,
+    date     DATE         NOT NULL,
     name     VARCHAR(255) NOT NULL,
     time_id  BIGINT,
     theme_id BIGINT,
     PRIMARY KEY (id),
-    FOREIGN KEY (time_id) REFERENCES time (id),
+    FOREIGN KEY (time_id) REFERENCES reservationTime (id),
     FOREIGN KEY (theme_id) REFERENCES theme (id)
 );
 
@@ -46,7 +46,7 @@ VALUES ('테마1', '테마1입니다.'),
        ('테마2', '테마2입니다.'),
        ('테마3', '테마3입니다.');
 
-INSERT INTO time (time_value)
+INSERT INTO reservationTime (time_value)
 VALUES ('10:00'),
        ('12:00'),
        ('14:00'),
