@@ -1,4 +1,4 @@
-package roomescape.time;
+package roomescape.reservationTime;
 
 import org.springframework.stereotype.Service;
 import roomescape.reservation.Reservation;
@@ -8,6 +8,7 @@ import java.util.List;
 
 @Service
 public class TimeService {
+
     private TimeDao timeDao;
     private ReservationDao reservationDao;
 
@@ -17,25 +18,25 @@ public class TimeService {
     }
 
     public List<AvailableTime> getAvailableTime(String date, Long themeId) {
-        List<Reservation> reservations = reservationDao.findByDateAndThemeId(date, themeId);
-        List<Time> times = timeDao.findAll();
+        List<Reservation> reservations = reservationDao.findAllReservationsByDateAndTheme(date, themeId);
+        List<ReservationTime> reservationTimes = timeDao.findAll();
 
-        return times.stream()
+        return reservationTimes.stream()
                 .map(time -> new AvailableTime(
                         time.getId(),
-                        time.getValue(),
+                        time.getValue().toString(),
                         reservations.stream()
                                 .anyMatch(reservation -> reservation.getTime().getId().equals(time.getId()))
                 ))
                 .toList();
     }
 
-    public List<Time> findAll() {
+    public List<ReservationTime> findAll() {
         return timeDao.findAll();
     }
 
-    public Time save(Time time) {
-        return timeDao.save(time);
+    public ReservationTime save(ReservationTime reservationTime) {
+        return timeDao.save(reservationTime);
     }
 
     public void deleteById(Long id) {

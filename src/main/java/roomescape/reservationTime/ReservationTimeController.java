@@ -1,4 +1,4 @@
-package roomescape.time;
+package roomescape.reservationTime;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 public class TimeController {
+
     private TimeService timeService;
 
     public TimeController(TimeService timeService) {
@@ -21,18 +22,19 @@ public class TimeController {
     }
 
     @GetMapping("/times")
-    public List<Time> list() {
+    public List<ReservationTime> list() {
         return timeService.findAll();
     }
 
     @PostMapping("/times")
-    public ResponseEntity<Time> create(@RequestBody Time time) {
-        if (time.getValue() == null || time.getValue().isEmpty()) {
-            throw new RuntimeException();
-        }
+    public ResponseEntity<ReservationTime> create(@RequestBody ReservationTime reservationTime) {
+        //todo: 수정 예정
+//        if (time.getValue() == null || time.getValue().isEmpty()) {
+//            throw new RuntimeException();
+//        }
 
-        Time newTime = timeService.save(time);
-        return ResponseEntity.created(URI.create("/times/" + newTime.getId())).body(newTime);
+        ReservationTime newReservationTime = timeService.save(reservationTime);
+        return ResponseEntity.created(URI.create("/times/" + newReservationTime.getId())).body(newReservationTime);
     }
 
     @DeleteMapping("/times/{id}")
