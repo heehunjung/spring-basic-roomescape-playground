@@ -14,12 +14,24 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import roomescape.auth.session.cookie.CookieProvider;
+import roomescape.auth.session.cookie.CookieResolver;
+import roomescape.auth.session.jwt.JwtResolver;
+import roomescape.member.MemberService;
 
 @WebMvcTest(AuthController.class)
 class AuthControllerTest {
 
     @MockBean
+    private MemberService memberService;
+    @MockBean
+    private JwtResolver jwtResolver;
+    @MockBean
+    private CookieResolver cookieResolver;
+    @MockBean
     private AuthService authService;
+    @MockBean
+    private CookieProvider cookieProvider;
 
     @Autowired
     private MockMvc mockMvc;
@@ -27,7 +39,7 @@ class AuthControllerTest {
     @Test
     void validTest() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        LoginRequest loginRequest = new LoginRequest("example.com", "a".repeat(256));
+        LoginRequest loginRequest = new LoginRequest("example.com", "a".repeat(21));
         String json = mapper.writeValueAsString(loginRequest);
 
         MvcResult result = mockMvc.perform(post("/login")

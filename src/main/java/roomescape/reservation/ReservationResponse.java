@@ -10,7 +10,7 @@ public record ReservationResponse(Long id,
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     public ReservationResponse(Reservation reservation) {
-        this(reservation.getId(), reservation.getName(), reservation.getTheme().getName(),
+        this(reservation.getId(), reservation.getName(), reservation.getThemeValue(),
                 reservation.getDateValue(), reservation.getTimeValue().formatted(TIME_FORMATTER));
     }
 }

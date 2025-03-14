@@ -36,6 +36,7 @@ public class ReservationController {
             System.out.println("name = " + name);
             reservationRequest = reservationRequest.update(name);
         }
+        System.out.println("reservationRequest = " + reservationRequest.theme() + "," + reservationRequest.time());
         ReservationResponse result = reservationService.save(reservationRequest);
 
         return ResponseEntity.created(URI.create("/reservations/" + result.id()))

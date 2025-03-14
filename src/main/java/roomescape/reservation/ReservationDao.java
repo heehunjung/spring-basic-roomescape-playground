@@ -17,16 +17,16 @@ public class ReservationDao {
 
     private static final RowMapper<Reservation> RESERVATION_ROW_MAPPER = (resultSet, rowNum) ->
             new Reservation(
-                    resultSet.getLong("reservation_id"),
+                    resultSet.getLong("id"),
                     resultSet.getString("name"),
                     resultSet.getObject("date", LocalDate.class),
                     new ReservationTime(
-                            resultSet.getLong("time_id"),
+                            resultSet.getLong("id"),
                             resultSet.getObject("time_value", LocalTime.class)
                     ),
                     new Theme(
-                            resultSet.getLong("theme_id"),
-                            resultSet.getString("name"),
+                            resultSet.getLong("id"),
+                            resultSet.getString("theme_name"),
                             resultSet.getString("description")
                     )
             );
@@ -42,7 +42,10 @@ public class ReservationDao {
     }
 
     public List<Reservation> findAll() {
-        String sql = "select * from reservation";
+        String sql = "SELECT * " +
+                "FROM reservation AS r " +
+                "INNER JOIN reservationTime AS rt ON r.time_id = rt.id " +
+                "INNER JOIN theme AS th ON r.theme_id = th.id";
 
         return jdbcTemplate.query(sql, RESERVATION_ROW_MAPPER);
     }
@@ -51,8 +54,8 @@ public class ReservationDao {
         Map<String, Object> parameters = Map.of(
                 "name", reservation.getName(),
                 "date", reservation.getDate(),
-                "time", reservation.getTime(),
-                "theme", reservation.getTheme()
+                "time_id", reservation.getTime().getId(),
+                "theme_id", reservation.getTheme().getId()
         );
         Long id = simpleJdbcInsert.executeAndReturnKey(parameters)
                 .longValue();
@@ -62,7 +65,7 @@ public class ReservationDao {
     }
 
     public void deleteById(Long id) {
-        String sql = "delete from reservation where reservation_id = ?";
+        String sql = "delete from reservation where id = ?";
 
         jdbcTemplate.update(sql, id);
     }

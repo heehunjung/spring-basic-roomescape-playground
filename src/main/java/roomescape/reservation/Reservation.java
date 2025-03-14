@@ -58,4 +58,8 @@ public class Reservation {
     public Theme getTheme() {
         return theme;
     }
+
+    public String getThemeValue() {
+        return theme.getName();
+    }
 }

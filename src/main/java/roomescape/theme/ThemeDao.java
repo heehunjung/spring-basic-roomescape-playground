@@ -17,7 +17,7 @@ public class ThemeDao {
     public static final RowMapper<Theme> THEME_ROW_MAPPER = (resultSet, rowNum) ->
             new Theme(
                     resultSet.getLong("id"),
-                    resultSet.getObject("name", String.class),
+                    resultSet.getObject("theme_name", String.class),
                     resultSet.getObject("description", String.class)
             );
 

@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS reservationTime
 CREATE TABLE IF NOT EXISTS theme
 (
     id          BIGINT       NOT NULL AUTO_INCREMENT,
-    name        VARCHAR(255) NOT NULL,
+    theme_name  VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL,
     deleted     BOOLEAN      NOT NULL DEFAULT FALSE,
     PRIMARY KEY (id)
@@ -41,7 +41,7 @@ INSERT INTO member (name, email, password, role)
 VALUES ('어드민', 'admin@email.com', 'password', 'ADMIN'),
        ('브라운', 'brown@email.com', 'password', 'USER');
 
-INSERT INTO theme (name, description)
+INSERT INTO theme (theme_name, description)
 VALUES ('테마1', '테마1입니다.'),
        ('테마2', '테마2입니다.'),
        ('테마3', '테마3입니다.');

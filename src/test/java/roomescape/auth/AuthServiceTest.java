@@ -17,7 +17,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import roomescape.member.Member;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class AuthServiceTest {
 
     @Autowired

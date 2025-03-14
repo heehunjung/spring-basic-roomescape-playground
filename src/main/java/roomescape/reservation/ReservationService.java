@@ -25,7 +25,8 @@ public class ReservationService {
         Theme theme = themeDao.findById(reservationRequest.theme());
         ReservationTime reservationTime = reservationTimeDao.findById(reservationRequest.time());
         Reservation reservation = reservationDao.save(reservationRequest.toReservation(theme, reservationTime));
-
+        System.out.println("reservation = " + reservation);
+        System.out.println("theme = " + theme);
         return new ReservationResponse(reservation);
     }
 
