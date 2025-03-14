@@ -113,4 +113,23 @@ public class MissionStepTest {
         assertThat(adminResponse.statusCode()).isEqualTo(201);
         assertThat(adminResponse.as(ReservationResponse.class).name()).isEqualTo("브라운");
     }
+
+    @Test
+    void 삼단계() {
+        String brownToken = authService.generateAccessToken(new LoginRequest("brown@email.com", "password"));
+
+        RestAssured.given().log().all()
+                .cookie("token", brownToken)
+                .get("/admin")
+                .then().log().all()
+                .statusCode(401);
+
+        String adminToken = authService.generateAccessToken(new LoginRequest("admin@email.com", "password"));
+
+        RestAssured.given().log().all()
+                .cookie("token", adminToken)
+                .get("/admin")
+                .then().log().all()
+                .statusCode(200);
+    }
 }

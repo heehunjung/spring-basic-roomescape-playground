@@ -27,7 +27,7 @@ class AuthServiceTest {
 
     @Test
     void generateAccessToken() {
-        jdbcTemplate.update("INSERT INTO member (name, email, password, role) VALUES (?, ?, ?, ?)", "비토",
+        jdbcTemplate.update("INSERT INTO member (name, email, password, role) VALUES (?, ?, ?, ?)", "망고",
                 "test@naver.com", "test1234", "admin");
         String accessToken = authService.generateAccessToken(new LoginRequest("test@naver.com", "test1234"));
 

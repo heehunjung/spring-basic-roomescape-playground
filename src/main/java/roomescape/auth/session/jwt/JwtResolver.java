@@ -1,5 +1,7 @@
 package roomescape.auth.session.jwt;
 
+import static roomescape.auth.session.jwt.JwtProvider.NAME;
+import static roomescape.auth.session.jwt.JwtProvider.ROLE;
 import static roomescape.auth.session.jwt.JwtProvider.SECRET_KEY;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -12,14 +14,22 @@ import roomescape.global.exception.RoomescapeUnauthorizedException;
 @Component
 public class JwtResolver {
 
-    public String resolveToken(String token) {
+    public String getName(String token) {
+        return resolveToken(token, NAME);
+    }
+
+    public String getRole(String token) {
+        return resolveToken(token, ROLE);
+    }
+
+    private String resolveToken(String token, String target) {
         try {
             String name = Jwts.parserBuilder()
                     .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
                     .build()
                     .parseClaimsJws(token)
                     .getBody()
-                    .get("name", String.class);
+                    .get(target, String.class);
             return name;
         } catch (ExpiredJwtException exception) {
             throw new RoomescapeUnauthorizedException("만료된 토큰입니다.");

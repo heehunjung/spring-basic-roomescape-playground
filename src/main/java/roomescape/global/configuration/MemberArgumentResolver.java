@@ -39,7 +39,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
         if (accessToken == null) {
             throw new RoomescapeBadRequestException("토큰이 잘못되었습니다.");
         }
-        String name = jwtResolver.resolveToken(accessToken);
+        String name = jwtResolver.getName(accessToken);
 
         return memberService.findByName(name);
     }
