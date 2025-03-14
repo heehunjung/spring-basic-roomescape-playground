@@ -22,5 +22,4 @@ public class CookieResolver {
         }
         return accessToken;
     }
-
 }
