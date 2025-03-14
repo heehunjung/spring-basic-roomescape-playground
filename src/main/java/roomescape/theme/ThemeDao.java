@@ -14,7 +14,7 @@ import roomescape.global.exception.RoomescapeNotFoundException;
 @Repository
 public class ThemeDao {
 
-    private static final RowMapper<Theme> THEME_ROW_MAPPER = (resultSet, rowNum) ->
+    public static final RowMapper<Theme> THEME_ROW_MAPPER = (resultSet, rowNum) ->
             new Theme(
                     resultSet.getLong("id"),
                     resultSet.getObject("name", String.class),
@@ -24,9 +24,10 @@ public class ThemeDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
 
-    public ThemeDao(JdbcTemplate jdbcTemplate, DataSource dataSource) {
+    public ThemeDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
+        this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("theme")
+                .usingGeneratedKeyColumns("id");
     }
 
     public List<Theme> findAll() {

@@ -3,19 +3,30 @@ package roomescape.reservation;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import roomescape.theme.Theme;
+import roomescape.theme.ThemeDao;
+import roomescape.reservationTime.ReservationTime;
+import roomescape.reservationTime.ReservationTimeDao;
 
 @Service
 public class ReservationService {
-    private ReservationDao reservationDao;
 
-    public ReservationService(ReservationDao reservationDao) {
+    private final ReservationDao reservationDao;
+    private final ThemeDao themeDao;
+    private final ReservationTimeDao reservationTimeDao;
+
+    public ReservationService(ReservationDao reservationDao, ThemeDao themeDao, final ReservationTimeDao reservationTimeDao) {
         this.reservationDao = reservationDao;
+        this.themeDao = themeDao;
+        this.reservationTimeDao = reservationTimeDao;
     }
 
     public ReservationResponse save(ReservationRequest reservationRequest) {
-        Reservation reservation = reservationDao.save(reservationRequest);
+        Theme theme = themeDao.findById(reservationRequest.themeId());
+        ReservationTime reservationTime = reservationTimeDao.findById(reservationRequest.timeId());
+        Reservation reservation = reservationDao.save(reservationRequest.toReservation(theme, reservationTime));
 
-        return new ReservationResponse(reservation.getId(), reservationRequest.getName(), reservation.getTheme().getName(), reservation.getDate(), reservation.getTime().getValue());
+        return new ReservationResponse(reservation);
     }
 
     public void deleteById(Long id) {
@@ -24,7 +35,7 @@ public class ReservationService {
 
     public List<ReservationResponse> findAll() {
         return reservationDao.findAll().stream()
-                .map(it -> new ReservationResponse(it.getId(), it.getName(), it.getTheme().getName(), it.getDate(), it.getTime().getValue()))
+                .map(it -> new ReservationResponse(it))
                 .toList();
     }
 }

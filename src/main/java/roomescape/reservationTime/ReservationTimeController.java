@@ -13,17 +13,17 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-public class TimeController {
+public class ReservationTimeController {
 
-    private TimeService timeService;
+    private ReservationTimeService reservationTimeService;
 
-    public TimeController(TimeService timeService) {
-        this.timeService = timeService;
+    public ReservationTimeController(ReservationTimeService reservationTimeService) {
+        this.reservationTimeService = reservationTimeService;
     }
 
     @GetMapping("/times")
     public List<ReservationTime> list() {
-        return timeService.findAll();
+        return reservationTimeService.findAll();
     }
 
     @PostMapping("/times")
@@ -33,18 +33,18 @@ public class TimeController {
 //            throw new RuntimeException();
 //        }
 
-        ReservationTime newReservationTime = timeService.save(reservationTime);
+        ReservationTime newReservationTime = reservationTimeService.save(reservationTime);
         return ResponseEntity.created(URI.create("/times/" + newReservationTime.getId())).body(newReservationTime);
     }
 
     @DeleteMapping("/times/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        timeService.deleteById(id);
+        reservationTimeService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/available-times")
     public ResponseEntity<List<AvailableTime>> availableTimes(@RequestParam String date, @RequestParam Long themeId) {
-        return ResponseEntity.ok(timeService.getAvailableTime(date, themeId));
+        return ResponseEntity.ok(reservationTimeService.getAvailableTime(date, themeId));
     }
 }

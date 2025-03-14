@@ -1,8 +1,8 @@
-package roomescape.auth.session;
+package roomescape.auth.session.cookie;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static roomescape.auth.session.JwtProvider.TOKEN;
+import static roomescape.auth.session.jwt.JwtProvider.TOKEN;
 
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;

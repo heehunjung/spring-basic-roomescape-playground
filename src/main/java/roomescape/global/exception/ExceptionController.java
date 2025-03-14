@@ -14,6 +14,7 @@ public class ExceptionController {
     @ExceptionHandler(Exception.class)
     public ResponseEntity handleRuntimeException(Exception exception) {
         exception.printStackTrace();
+
         return ResponseEntity.internalServerError()
                 .body("서버 에러 관리자에게 문의해주세요.");
     }

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import roomescape.global.exception.RoomescapeNotFoundException;
 
 @Repository
-public class TimeDao {
+public class ReservationTimeDao {
 
     public static final RowMapper<ReservationTime> TIME_ROW_MAPPER = (resultSet, rowNum) ->
             new ReservationTime(
@@ -24,7 +24,7 @@ public class TimeDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
 
-    public TimeDao(JdbcTemplate jdbcTemplate) {
+    public ReservationTimeDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("time")
                 .usingGeneratedKeyColumns("id");

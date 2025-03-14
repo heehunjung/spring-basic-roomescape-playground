@@ -1,6 +1,6 @@
-package roomescape.auth.session;
+package roomescape.auth.session.cookie;
 
-import static roomescape.auth.session.JwtProvider.TOKEN;
+import static roomescape.auth.session.jwt.JwtProvider.TOKEN;
 
 import jakarta.servlet.http.Cookie;
 import java.util.Arrays;

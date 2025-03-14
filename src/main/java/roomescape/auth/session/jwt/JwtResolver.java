@@ -1,9 +1,7 @@
-package roomescape.auth.session;
+package roomescape.auth.session.jwt;
 
-import static roomescape.auth.session.JwtProvider.SECRET_KEY;
-import static roomescape.auth.session.JwtProvider.NAME;
+import static roomescape.auth.session.jwt.JwtProvider.SECRET_KEY;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -13,7 +11,8 @@ import roomescape.global.exception.RoomescapeUnauthorizedException;
 
 @Component
 public class JwtResolver {
-    public String name(String token) {
+
+    public String resolveToken(String token) {
         try {
             String name = Jwts.parserBuilder()
                     .setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
@@ -24,8 +23,8 @@ public class JwtResolver {
             return name;
         } catch (ExpiredJwtException exception) {
             throw new RoomescapeUnauthorizedException("만료된 토큰입니다.");
-        } catch (JwtException exception) {
-            throw new RoomescapeUnauthorizedException("권한이 없습니다.");
+        } catch (Exception exception) {
+            throw new RoomescapeUnauthorizedException("잘못된 토큰입니다. 다시 로그인 해주세요.");
         }
     }
 }

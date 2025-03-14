@@ -7,19 +7,19 @@ import roomescape.reservation.ReservationDao;
 import java.util.List;
 
 @Service
-public class TimeService {
+public class ReservationTimeService {
 
-    private TimeDao timeDao;
+    private ReservationTimeDao reservationTimeDao;
     private ReservationDao reservationDao;
 
-    public TimeService(TimeDao timeDao, ReservationDao reservationDao) {
-        this.timeDao = timeDao;
+    public ReservationTimeService(ReservationTimeDao reservationTimeDao, ReservationDao reservationDao) {
+        this.reservationTimeDao = reservationTimeDao;
         this.reservationDao = reservationDao;
     }
 
     public List<AvailableTime> getAvailableTime(String date, Long themeId) {
         List<Reservation> reservations = reservationDao.findAllReservationsByDateAndTheme(date, themeId);
-        List<ReservationTime> reservationTimes = timeDao.findAll();
+        List<ReservationTime> reservationTimes = reservationTimeDao.findAll();
 
         return reservationTimes.stream()
                 .map(time -> new AvailableTime(
@@ -32,14 +32,14 @@ public class TimeService {
     }
 
     public List<ReservationTime> findAll() {
-        return timeDao.findAll();
+        return reservationTimeDao.findAll();
     }
 
     public ReservationTime save(ReservationTime reservationTime) {
-        return timeDao.save(reservationTime);
+        return reservationTimeDao.save(reservationTime);
     }
 
     public void deleteById(Long id) {
-        timeDao.deleteById(id);
+        reservationTimeDao.deleteById(id);
     }
 }

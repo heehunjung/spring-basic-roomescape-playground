@@ -1,6 +1,6 @@
-package roomescape.auth.session;
+package roomescape.auth.session.cookie;
 
-import static roomescape.auth.session.JwtProvider.TOKEN;
+import static roomescape.auth.session.jwt.JwtProvider.TOKEN;
 
 import java.time.Duration;
 import org.springframework.http.ResponseCookie;

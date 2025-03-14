@@ -47,12 +47,7 @@ VALUES ('테마1', '테마1입니다.'),
        ('테마3', '테마3입니다.');
 
 INSERT INTO reservationTime (time_value)
-VALUES ('10:00'),
-       ('12:00'),
-       ('14:00'),
-       ('16:00'),
-       ('18:00'),
-       ('20:00');
+VALUES ('10:00'), ('12:00'), ('14:00'), ('16:00'), ('18:00'), ('20:00');
 
 INSERT INTO reservation (name, date, time_id, theme_id)
 VALUES ('어드민', '2024-03-01', 1, 1),
