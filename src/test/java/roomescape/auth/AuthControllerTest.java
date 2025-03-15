@@ -3,6 +3,7 @@ package roomescape.auth;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static roomescape.auth.LoginRequest.MAX_PASSWORD_LENGTH;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -39,7 +40,7 @@ class AuthControllerTest {
     @Test
     void validTest() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        LoginRequest loginRequest = new LoginRequest("example.com", "a".repeat(21));
+        LoginRequest loginRequest = new LoginRequest("example.com", "a".repeat(MAX_PASSWORD_LENGTH + 1));
         String json = mapper.writeValueAsString(loginRequest);
 
         MvcResult result = mockMvc.perform(post("/login")

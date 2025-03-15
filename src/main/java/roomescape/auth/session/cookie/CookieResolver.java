@@ -15,11 +15,8 @@ public class CookieResolver {
                 .filter(cookie -> cookie.getName().equals(TOKEN))
                 .map(Cookie::getValue)
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new RoomescapeUnauthorizedException("로그인 되어있지 않습니다."));
 
-        if (accessToken == null) {
-            throw new RoomescapeUnauthorizedException("로그인 되어있지 않습니다.");
-        }
         return accessToken;
     }
 }
