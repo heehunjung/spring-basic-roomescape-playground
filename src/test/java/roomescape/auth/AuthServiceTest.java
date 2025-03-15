@@ -36,16 +36,12 @@ class AuthServiceTest {
     }
 
     @Test
-    void checkAccessToken(){
-        // 여기서 저장 안됨
-        List<Map<String, Object>> allMembers = jdbcTemplate.queryForList("SELECT * FROM member");
-        System.out.println("회원 전체 데이터: " + allMembers);
+    void checkAccessToken() {
         jdbcTemplate.update("INSERT INTO member (name, email, password, role) VALUES (?, ?, ?, ?)", "망고",
                 "test2@naver.com", "test1234", "admin");
-        Long insertedId = jdbcTemplate.queryForObject("SELECT id FROM member WHERE email = 'test2@naver.com'", Long.class);
-        // DB 상태 확인을 위해 member 테이블 전체 데이터를 조회하고 출력
-        allMembers = jdbcTemplate.queryForList("SELECT * FROM member");
-        System.out.println("회원 전체 데이터: " + allMembers);
+        Long insertedId = jdbcTemplate.queryForObject("SELECT id FROM member WHERE email = 'test2@naver.com'",
+                Long.class);
+
         Member member = new Member(insertedId, "망고", "test2@naver.com", "admin");
         String jwt = Jwts.builder()
                 .setSubject(member.getId().toString())

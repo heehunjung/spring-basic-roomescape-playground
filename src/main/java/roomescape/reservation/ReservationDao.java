@@ -3,6 +3,7 @@ package roomescape.reservation;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Map;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -51,12 +52,7 @@ public class ReservationDao {
     }
 
     public Reservation save(Reservation reservation) {
-        Map<String, Object> parameters = Map.of(
-                "name", reservation.getName(),
-                "date", reservation.getDate(),
-                "time_id", reservation.getTime().getId(),
-                "theme_id", reservation.getTheme().getId()
-        );
+        Map<String, Object> parameters = getReservationMap(reservation);
         Long id = simpleJdbcInsert.executeAndReturnKey(parameters)
                 .longValue();
 
@@ -74,5 +70,15 @@ public class ReservationDao {
         String sql = "select * from reservation where date = ? and theme_id = ?";
 
         return jdbcTemplate.query(sql, RESERVATION_ROW_MAPPER, date, themeId);
+    }
+
+    private Map<String, Object> getReservationMap(Reservation reservation) {
+        Map<String, Object> parameters = Map.of(
+                "name", reservation.getName(),
+                "date", reservation.getDate(),
+                "time_id", reservation.getTime().getId(),
+                "theme_id", reservation.getTheme().getId()
+        );
+        return parameters;
     }
 }

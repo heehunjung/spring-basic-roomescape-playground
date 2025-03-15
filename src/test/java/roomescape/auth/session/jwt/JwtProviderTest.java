@@ -23,7 +23,7 @@ class JwtProviderTest {
     @Nested
     class generateToken {
         @Test
-        void 토큰을_생성하면_올바른_정보가_담겨있다() {
+        void 토큰을_생성을_적절히_생성한다() {
             Long userId = 1L;
             String userName = "어드민";
             String userRole = "ADMIN";
