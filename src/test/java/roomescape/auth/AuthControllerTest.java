@@ -3,6 +3,7 @@ package roomescape.auth;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static roomescape.auth.LoginRequest.MAX_EMAIL_LENGTH;
 import static roomescape.auth.LoginRequest.MAX_PASSWORD_LENGTH;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,7 +41,8 @@ class AuthControllerTest {
     @Test
     void validTest() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        LoginRequest loginRequest = new LoginRequest("example.com", "a".repeat(MAX_PASSWORD_LENGTH + 1));
+        LoginRequest loginRequest = new LoginRequest("b".repeat(MAX_EMAIL_LENGTH + 1),
+                "a".repeat(MAX_PASSWORD_LENGTH + 1));
         String json = mapper.writeValueAsString(loginRequest);
 
         MvcResult result = mockMvc.perform(post("/login")
@@ -54,7 +56,8 @@ class AuthControllerTest {
         List<String> list = getExceptionMessages(exception);
         assertThat(list).containsExactlyInAnyOrder(
                 "[email] 이메일 양식에 맞지 않습니다.",
-                "[password] 비밀번호는 20자 이하여야 합니다.");
+                "[email] 이메일은 20자 이하여야 합니다.",
+                "[password] 비밀번호는 255자 이하여야 합니다.");
     }
 
     private List<String> getExceptionMessages(MethodArgumentNotValidException exception) {
