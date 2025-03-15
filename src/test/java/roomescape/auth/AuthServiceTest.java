@@ -1,13 +1,10 @@
 package roomescape.auth;
 
-import static java.lang.Thread.sleep;
 import static org.assertj.core.api.Assertions.*;
 import static roomescape.auth.session.jwt.JwtProvider.SECRET_KEY;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

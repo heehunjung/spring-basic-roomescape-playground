@@ -5,7 +5,6 @@ import static roomescape.auth.session.jwt.JwtProvider.ROLE;
 import static roomescape.auth.session.jwt.JwtProvider.SECRET_KEY;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
