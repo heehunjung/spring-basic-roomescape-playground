@@ -1,6 +1,7 @@
 package roomescape.member;
 
 public class Member {
+
     private final Long id;
     private final String name;
     private final String email;
