@@ -1,6 +1,7 @@
 package roomescape.reservationTime;
 
 import org.springframework.stereotype.Service;
+import roomescape.global.exception.RoomescapeBadRequestException;
 import roomescape.reservation.Reservation;
 import roomescape.reservation.ReservationDao;
 
@@ -36,6 +37,9 @@ public class ReservationTimeService {
     }
 
     public ReservationTime save(ReservationTime reservationTime) {
+        if (reservationTime.getId() == null || reservationTime.getValue() == null) {
+            throw new RoomescapeBadRequestException("잘못된 예약 시간 정보입니다.");
+        }
         return reservationTimeDao.save(reservationTime);
     }
 

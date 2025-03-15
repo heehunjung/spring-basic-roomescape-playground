@@ -28,23 +28,20 @@ public class ReservationTimeController {
 
     @PostMapping("/times")
     public ResponseEntity<ReservationTime> create(@RequestBody ReservationTime reservationTime) {
-        //todo: 수정 예정
-//        if (time.getValue() == null || time.getValue().isEmpty()) {
-//            throw new RuntimeException();
-//        }
-
         ReservationTime newReservationTime = reservationTimeService.save(reservationTime);
+
         return ResponseEntity.created(URI.create("/times/" + newReservationTime.getId())).body(newReservationTime);
     }
 
     @DeleteMapping("/times/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable long id) {
         reservationTimeService.deleteById(id);
+
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/available-times")
-    public ResponseEntity<List<AvailableTime>> availableTimes(@RequestParam String date, @RequestParam Long themeId) {
+    public ResponseEntity<List<AvailableTime>> availableTimes(@RequestParam String date, @RequestParam long themeId) {
         return ResponseEntity.ok(reservationTimeService.getAvailableTime(date, themeId));
     }
 }
